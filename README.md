@@ -96,29 +96,8 @@ make tidy
 
 ## Dictionary data
 
-`liff.json` is the authoritative structured dictionary. It uses plain JSON so
-lookup programs can load its `entries` object with a standard-library parser.
-Definition values are Base64-encoded UTF-8 to keep the original prose from
-being directly readable in the data file; the code generator decodes them at
-build time. This is basic obfuscation, not encryption.
+`liff.json` is the source dictionary.
 
-Each entry has this shape:
-
-```json
-{
-  "part_of_speech": "n.",
-  "definition": "VGhlIG9yaWdpbmFsIGRlZmluaXRpb24gdGV4dC4=",
-  "references": [
-    {
-      "target": "ANOTHER HEADWORD",
-      "relation": "q.v.",
-      "label": "source spelling"
-    }
-  ]
-}
-```
-
-The document declares `"definition_encoding": "base64-utf8"`.
 `part_of_speech` is `null` where the source supplies no label. `target` is
 always the canonical key of another object in `entries`; `label` preserves the
 spelling used in the definition. The supported link relations are `q.v.` and
@@ -171,7 +150,6 @@ Filters are generic operations:
   produce escaped literals
 - `items`, `keys`, and `values` expose JSON objects for iteration
 - `length` returns the size of an object, array, or string
-- `base64_decode` decodes strict Base64 containing UTF-8 text
 - `text` explicitly converts a scalar to text
 
 For example, `{{#scores|items}}{{key}}={{value}};{{/scores}}` iterates an
