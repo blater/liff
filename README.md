@@ -7,16 +7,24 @@ implementations in Rust, Go, Python, Zig, Java, TypeScript, Lua, and C.
 
 ## Usage
 
-Build one implementation, then run its executable. The examples below use
-Rust; every completed port implements the same command-line behavior.
+Every completed port implements the same `liff` command-line behavior.
 
-```sh
-impl/rust/build.sh
+```console
+$ liff                 # retrieve a random entry
+THRUPP
+To hold a ruler on one end on a desk and make the other end go bbddbbddbbrrbrrrrddrr.
 
-impl/rust/bin/liff                 # random entry
-impl/rust/bin/liff banteer         # exact lookup
-impl/rust/bin/liff glutt           # confidence-qualified fuzzy lookup
-impl/rust/bin/liff ainderby steeple
+$ liff banteer         # exact lookup
+BANTEER
+A lusty and raucous old ballad sung after a particularly spectacular araglin (q.v.) has been pulled off.
+
+$ liff scons           # confidence-qualified fuzzy lookup
+SCONSER
+A person who looks around them when talking to you, to see if there's anyone more interesting about.
+
+$ liff ainderby steeple   # multiple-word match
+AINDERBY STEEPLE
+One who asks you a question with the apparent motive of wanting to hear your answer, but who cuts short your opening sentence by leaning forward and saying 'and I'll tell you why I ask...' and then talking solidly for the next hour.
 ```
 
 Searches are case-insensitive and ignore insignificant punctuation. A fuzzy
@@ -27,11 +35,11 @@ list; weaker searches produce a not-found message.
 Quoted glob patterns are also supported. Quote them so the shell passes the
 wildcards to `liff` instead of expanding them as filenames:
 
-```sh
-impl/rust/bin/liff 'bil*'  # unique match: BILBSTER
-impl/rust/bin/liff 'b*'    # every headword beginning with B
-impl/rust/bin/liff 'b?d*'  # ? matches exactly one character
-impl/rust/bin/liff '*'     # every entry
+```console
+$ liff 'bil*'  # unique match: BILBSTER
+$ liff 'b*'    # every headword beginning with B
+$ liff 'b?d*'  # ? matches exactly one character
+$ liff '*'     # every entry
 ```
 
 `*` matches zero or more characters and `?` matches exactly one. One glob match
@@ -43,36 +51,12 @@ Successful exact, fuzzy, glob, and random results exit with status 0.
 Suggestions and not-found results exit with status 1; invalid CLI usage exits
 with status 2.
 
-## Sample output
-
-With no search term, `liff` returns a random entry, for example:
-
-```console
-$ impl/rust/bin/liff
-WIVENHOE
-The cry of alacrity with which a sprightly eighty-year-old breaks the ice on the lake when going for a swim on Christmas Eve.
-```
-
-An exact lookup returns the matching headword and definition:
-
-```console
-$ impl/rust/bin/liff banteer
-BANTEER
-A lusty and raucous old ballad sung after a particularly spectacular araglin (q.v.) has been pulled off.
-```
-
-A sufficiently confident unique fuzzy match is returned directly:
-
-```console
-$ impl/rust/bin/liff glutt
-GLUTT LODGE
-The place where food can be stored after having a tooth extracted. Some Arabs can go without sustenance for up to six weeks on a full glutt lodge, hence the expression 'the ship of the desert'.
-```
+## More sample output
 
 A glob with several matches offers suggestions:
 
 ```console
-$ impl/rust/bin/liff 'b?d*'
+$ liff 'b?d*'
 Did you mean?
 BEDFONT
 BODMIN
@@ -83,7 +67,7 @@ BUDE
 An unsuccessful search reports the original query:
 
 ```console
-$ impl/rust/bin/liff completely-made-up
+$ liff completely-made-up
 No definition found for "completely-made-up".
 ```
 
