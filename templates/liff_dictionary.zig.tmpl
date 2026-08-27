@@ -9,7 +9,7 @@ pub const entries = [_]model.Entry{
 {{#entries|items}}    .{
         .word = {{key|zig}},
         .part_of_speech = {{#value.part_of_speech}}{{value.part_of_speech|zig}}{{/value.part_of_speech}}{{^value.part_of_speech}}null{{/value.part_of_speech}},
-        .definition = {{value.definition|zig}},
+        .definition = {{value.definition|base64_decode|zig}},
         .references = {{^value.references}}&.{}{{/value.references}}{{#value.references|length}}&.{
 {{#value.references}}            .{
                 .target = {{target|zig}},

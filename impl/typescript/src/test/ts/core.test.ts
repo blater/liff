@@ -26,6 +26,13 @@ declare const console: { log(text: string): void };
 const fs = require("node:fs") as {
     readFileSync(path: string, encoding: "utf8"): string;
 };
+const nodeBuffer = require("node:buffer") as {
+    readonly Buffer: {
+        from(value: string, encoding: "base64"): {
+            toString(encoding: "utf8"): string;
+        };
+    };
+};
 
 interface SearchCase {
     readonly query: string;
@@ -90,6 +97,7 @@ interface SourceEntry {
 
 interface SourceDocument {
     readonly schema_version: number;
+    readonly definition_encoding: "base64-utf8";
     readonly title: string;
     readonly author: string;
     readonly entries: Readonly<Record<string, SourceEntry>>;
@@ -182,7 +190,8 @@ function sharedAlgorithmCases(): void {
 
 function generatedSourceAndReferences(): void {
     const source = readJson<SourceDocument>(`${root}/liff.json`);
-    equal(source.schema_version, 1, "source schema version");
+    equal(source.schema_version, 2, "source schema version");
+    equal(source.definition_encoding, "base64-utf8", "definition encoding");
     equal(TITLE, source.title, "title");
     equal(AUTHOR, source.author, "author");
     const generatedEntries = entries();
@@ -193,7 +202,11 @@ function generatedSourceAndReferences(): void {
         const actual = generatedEntries[index]!;
         equal(actual.word, word, "canonical word");
         equal(actual.partOfSpeech, wanted.part_of_speech, "part of speech");
-        equal(actual.definition, wanted.definition, "definition");
+        equal(
+            actual.definition,
+            nodeBuffer.Buffer.from(wanted.definition, "base64").toString("utf8"),
+            "definition",
+        );
         deepEqual(actual.references, wanted.references, "references");
         for (const reference of actual.references) {
             const resolved = DEFAULT_DICTIONARY.search(reference.target);

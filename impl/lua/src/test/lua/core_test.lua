@@ -20,6 +20,38 @@ local function check(condition, message)
     end
 end
 
+local base64_digits = {}
+for index = 1, #"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" do
+    local character = string.sub(
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+        index,
+        index
+    )
+    base64_digits[character] = index - 1
+end
+
+local function decode_base64(value)
+    local result = {}
+    local accumulator = 0
+    local bits = 0
+    for index = 1, #value do
+        local character = string.sub(value, index, index)
+        if character == "=" then
+            break
+        end
+        local digit = assert(base64_digits[character], "invalid Base64 definition")
+        accumulator = accumulator * 64 + digit
+        bits = bits + 6
+        if bits >= 8 then
+            bits = bits - 8
+            local divisor = 2 ^ bits
+            result[#result + 1] = string.char(math.floor(accumulator / divisor) % 256)
+            accumulator = accumulator % divisor
+        end
+    end
+    return table.concat(result)
+end
+
 local function shared_search_cases()
     local contract = json.read(root .. "/impl/search-cases.json")
     equal(contract.schema_version, 1, "search schema version")
@@ -85,7 +117,8 @@ end
 
 local function generated_source_and_references()
     local source = json.read(root .. "/liff.json")
-    equal(source.schema_version, 1, "source schema version")
+    equal(source.schema_version, 2, "source schema version")
+    equal(source.definition_encoding, "base64-utf8", "definition encoding")
     equal(liff.TITLE, source.title, "title")
     equal(liff.AUTHOR, source.author, "author")
     local source_order = source.entries.__order
@@ -100,7 +133,7 @@ local function generated_source_and_references()
             expected_part = nil
         end
         equal(actual.part_of_speech, expected_part, "part of speech")
-        equal(actual.definition, expected.definition, "definition")
+        equal(actual.definition, decode_base64(expected.definition), "definition")
         equal(#actual.references, #expected.references, "reference count")
         for reference_index, wanted in ipairs(expected.references) do
             local reference = actual.references[reference_index]

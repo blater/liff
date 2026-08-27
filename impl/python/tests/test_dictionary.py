@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 import unittest
 from dataclasses import FrozenInstanceError
@@ -24,7 +25,8 @@ class GeneratedDictionaryTests(unittest.TestCase):
         with (ROOT_DIR / "liff.json").open(encoding="utf-8") as source_file:
             source = json.load(source_file)
 
-        self.assertEqual(source["schema_version"], 1)
+        self.assertEqual(source["schema_version"], 2)
+        self.assertEqual(source["definition_encoding"], "base64-utf8")
         self.assertEqual(source["title"], TITLE)
         self.assertEqual(source["author"], AUTHOR)
         self.assertEqual(source["source"], "liff-corrected.txt")
@@ -38,7 +40,12 @@ class GeneratedDictionaryTests(unittest.TestCase):
             with self.subTest(word=word):
                 self.assertEqual(actual.word, word)
                 self.assertEqual(actual.part_of_speech, expected["part_of_speech"])
-                self.assertEqual(actual.definition, expected["definition"])
+                self.assertEqual(
+                    actual.definition,
+                    base64.b64decode(expected["definition"], validate=True).decode(
+                        "utf-8"
+                    ),
+                )
                 self.assertEqual(
                     [
                         {

@@ -2,16 +2,18 @@ package liff
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"testing"
 )
 
 type sourceDocument struct {
-	SchemaVersion int                  `json:"schema_version"`
-	Title         string               `json:"title"`
-	Author        string               `json:"author"`
-	Source        string               `json:"source"`
-	Entries       orderedSourceEntries `json:"entries"`
+	SchemaVersion      int                  `json:"schema_version"`
+	Title              string               `json:"title"`
+	Author             string               `json:"author"`
+	Source             string               `json:"source"`
+	DefinitionEncoding string               `json:"definition_encoding"`
+	Entries            orderedSourceEntries `json:"entries"`
 }
 
 type orderedSourceEntries []sourceEntry
@@ -53,8 +55,11 @@ func (entries *orderedSourceEntries) UnmarshalJSON(data []byte) error {
 func TestGeneratedDataExactlyMatchesSource(t *testing.T) {
 	var source sourceDocument
 	readFixture(t, "../liff.json", &source)
-	if source.SchemaVersion != 1 {
-		t.Fatalf("source schema version = %d, want 1", source.SchemaVersion)
+	if source.SchemaVersion != 2 {
+		t.Fatalf("source schema version = %d, want 2", source.SchemaVersion)
+	}
+	if source.DefinitionEncoding != "base64-utf8" {
+		t.Fatalf("definition encoding = %q, want base64-utf8", source.DefinitionEncoding)
 	}
 	if source.Title != Title || source.Author != Author || source.Source != "liff-corrected.txt" {
 		t.Errorf("generated metadata does not match source: %#v", source)
@@ -77,7 +82,11 @@ func TestGeneratedDataExactlyMatchesSource(t *testing.T) {
 		} else if !present || partOfSpeech != *expected.PartOfSpeech {
 			t.Errorf("%s part of speech = (%q, %v), want %q", expected.Word, partOfSpeech, present, *expected.PartOfSpeech)
 		}
-		if entry.Definition() != expected.Definition {
+		expectedDefinition, err := base64.StdEncoding.DecodeString(expected.Definition)
+		if err != nil {
+			t.Fatalf("%s definition is not valid Base64: %v", expected.Word, err)
+		}
+		if entry.Definition() != string(expectedDefinition) {
 			t.Errorf("%s definition differs from source", expected.Word)
 		}
 

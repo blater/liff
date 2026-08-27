@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import subprocess
 from pathlib import Path
@@ -78,8 +79,14 @@ def decode_hex(value: bytes) -> str | None:
     return bytes.fromhex(value.decode("ascii")).decode("utf-8")
 
 
+def decode_definition(value: str) -> str:
+    return base64.b64decode(value, validate=True).decode("utf-8")
+
+
 def test_generated_source(driver: Path, root: Path) -> None:
     source = json.loads((root / "liff.json").read_text(encoding="utf-8"))
+    assert source["schema_version"] == 2
+    assert source["definition_encoding"] == "base64-utf8"
     output = subprocess.run(
         [str(driver), "dump"], check=True, capture_output=True
     ).stdout.splitlines()
@@ -96,7 +103,7 @@ def test_generated_source(driver: Path, root: Path) -> None:
         assert int(fields[1]) == entry_index
         assert decode_hex(fields[2]) == word
         assert decode_hex(fields[3]) == expected["part_of_speech"]
-        assert decode_hex(fields[4]) == expected["definition"]
+        assert decode_hex(fields[4]) == decode_definition(expected["definition"])
         assert int(fields[5]) == len(expected["references"])
         for reference_index, reference in enumerate(expected["references"]):
             fields = output[cursor].split(b"\t")
@@ -115,7 +122,7 @@ def test_cli(cli: Path, root: Path) -> None:
     source = json.loads((root / "liff.json").read_text(encoding="utf-8"))
     random_output = run(cli)
     word, definition = random_output.rstrip("\n").split("\n", 1)
-    assert source["entries"][word]["definition"] == definition
+    assert decode_definition(source["entries"][word]["definition"]) == definition
 
     for arguments, prefix in [
         (("banteer",), "BANTEER\nA lusty and raucous old ballad"),

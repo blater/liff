@@ -13,7 +13,7 @@ final class GeneratedDictionary {
 {{#entries|items}}        new Entry(
             {{key|java}},
             {{#value.part_of_speech}}Optional.of({{value.part_of_speech|java}}){{/value.part_of_speech}}{{^value.part_of_speech}}Optional.empty(){{/value.part_of_speech}},
-            {{value.definition|java}},
+            {{value.definition|base64_decode|java}},
             {{^value.references}}List.of(){{/value.references}}{{#value.references|length}}List.of(new Reference[] {
 {{#value.references}}                new Reference({{target|java}}, {{relation|java}}, {{label|java}}),
 {{/value.references}}            }){{/value.references}}

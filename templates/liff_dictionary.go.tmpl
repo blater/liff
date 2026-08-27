@@ -12,7 +12,7 @@ var generatedEntries = []Entry{
 {{#entries|items}}	newEntry(
 		{{key|go}},
 		{{#value.part_of_speech}}optionalString({{value.part_of_speech|go}}){{/value.part_of_speech}}{{^value.part_of_speech}}nil{{/value.part_of_speech}},
-		{{value.definition|go}},
+		{{value.definition|base64_decode|go}},
 		{{^value.references}}nil{{/value.references}}{{#value.references|length}}[]Reference{
 {{#value.references}}			newReference({{target|go}}, {{relation|go}}, {{label|go}}),
 {{/value.references}}		}{{/value.references}},

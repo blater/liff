@@ -9,7 +9,7 @@ return model.immutable({
 {{#entries|items}}        model.entry(
             {{key|lua}},
             {{#value.part_of_speech}}{{value.part_of_speech|lua}}{{/value.part_of_speech}}{{^value.part_of_speech}}nil{{/value.part_of_speech}},
-            {{value.definition|lua}},
+            {{value.definition|base64_decode|lua}},
             {
 {{#value.references}}                model.reference({{target|lua}}, {{relation|lua}}, {{label|lua}}),
 {{/value.references}}            }

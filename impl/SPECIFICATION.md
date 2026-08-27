@@ -1,6 +1,6 @@
 # Liff product and implementation specification
 
-Status: normative. Version: 1.
+Status: normative. Version: 2.
 
 This document defines the common product and implementation contract for every
 Liff port. A port may use idiomatic names and types, but its observable results,
@@ -54,15 +54,16 @@ separate package, module, or build target.
 
 ```text
 Document
-  schema_version: 1
+  schema_version: 2
   title: string
   author: string
   source: string
+  definition_encoding: "base64-utf8"
   entries: object<canonical headword, EntryData>
 
 EntryData
   part_of_speech: string | null
-  definition: string
+  definition: Base64 string containing the UTF-8 definition
   references: Reference[]
 
 Reference
@@ -73,9 +74,11 @@ Reference
 
 Required invariants:
 
-- `schema_version` is exactly 1;
+- `schema_version` is exactly 2;
+- `definition_encoding` is exactly `base64-utf8`;
+- every definition is canonical Base64 and decodes to valid UTF-8;
 - canonical headwords are unique;
-- version 1 canonical headwords contain only ASCII characters;
+- version 2 canonical headwords contain only ASCII characters;
 - normalized headwords are unique;
 - every reference target is a canonical headword in `entries`;
 - entry order is the textual member order of `entries` in the UTF-8

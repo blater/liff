@@ -190,7 +190,11 @@ test "generated dictionary exactly matches source and references resolve" {
     defer parsed.deinit();
 
     const root = parsed.value.object;
-    try std.testing.expectEqual(@as(i64, 1), root.get("schema_version").?.integer);
+    try std.testing.expectEqual(@as(i64, 2), root.get("schema_version").?.integer);
+    try std.testing.expectEqualStrings(
+        "base64-utf8",
+        root.get("definition_encoding").?.string,
+    );
     try std.testing.expectEqualStrings(liff.title, root.get("title").?.string);
     try std.testing.expectEqualStrings(liff.author, root.get("author").?.string);
     const source_entries = root.get("entries").?.object;
@@ -202,7 +206,14 @@ test "generated dictionary exactly matches source and references resolve" {
         const entry = dictionary.entries()[index];
         try std.testing.expectEqualStrings(source.key_ptr.*, entry.word);
         const value = source.value_ptr.object;
-        try std.testing.expectEqualStrings(value.get("definition").?.string, entry.definition);
+        const encoded_definition = value.get("definition").?.string;
+        const decoded_size = try std.base64.standard.Decoder.calcSizeForSlice(
+            encoded_definition,
+        );
+        const decoded_definition = try allocator.alloc(u8, decoded_size);
+        defer allocator.free(decoded_definition);
+        try std.base64.standard.Decoder.decode(decoded_definition, encoded_definition);
+        try std.testing.expectEqualStrings(decoded_definition, entry.definition);
         const source_part = value.get("part_of_speech").?;
         switch (source_part) {
             .null => try std.testing.expect(entry.part_of_speech == null),

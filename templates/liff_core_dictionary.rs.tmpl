@@ -9,7 +9,7 @@ pub(crate) static ENTRIES: &[Entry] = &[
 {{#entries|items}}    Entry::new(
         {{key|rust}},
         {{#value.part_of_speech}}Some({{value.part_of_speech|rust}}){{/value.part_of_speech}}{{^value.part_of_speech}}None{{/value.part_of_speech}},
-        {{value.definition|rust}},
+        {{value.definition|base64_decode|rust}},
         {{^value.references}}&[]{{/value.references}}{{#value.references|length}}&[
 {{#value.references}}            Reference::new({{target|rust}}, {{relation|rust}}, {{label|rust}}),
 {{/value.references}}        ]{{/value.references}},

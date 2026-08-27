@@ -9,7 +9,7 @@ const LiffEntry LIFF_GENERATED_ENTRIES[] = {
 {{#entries|items}}    {
         .word = {{key|c}},
         .part_of_speech = {{#value.part_of_speech}}{{value.part_of_speech|c}}{{/value.part_of_speech}}{{^value.part_of_speech}}NULL{{/value.part_of_speech}},
-        .definition = {{value.definition|c}},
+        .definition = {{value.definition|base64_decode|c}},
         .reference_count = {{value.references|length}},
         .references = {{^value.references}}NULL{{/value.references}}{{#value.references|length}}(const LiffReference[]) {
 {{#value.references}}            {

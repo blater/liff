@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import json
 import math
 import sys
@@ -477,6 +479,21 @@ def apply_filter(name: str, value: Any) -> Any:
         if not isinstance(value, (Mapping, list, str)):
             raise GenerationError("|length requires an object, array, or string")
         return len(value)
+    if name == "base64_decode":
+        if not isinstance(value, str):
+            raise GenerationError("|base64_decode requires a string")
+        try:
+            decoded = base64.b64decode(value, validate=True)
+        except (binascii.Error, ValueError) as exc:
+            raise GenerationError("|base64_decode requires valid Base64") from exc
+        if base64.b64encode(decoded).decode("ascii") != value:
+            raise GenerationError("|base64_decode requires canonical Base64")
+        try:
+            return decoded.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise GenerationError(
+                "|base64_decode requires Base64-encoded UTF-8 text"
+            ) from exc
     raise GenerationError(f"Unknown template filter: {name}")
 
 

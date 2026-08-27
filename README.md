@@ -96,16 +96,18 @@ make tidy
 
 ## Dictionary data
 
-`liff.json` is a lookup-ready version of `liff-corrected.txt`. It uses plain
-JSON so lookup programs can load it with a standard-library parser and use the
-`entries` object directly as a word-to-entry map.
+`liff.json` is the authoritative structured dictionary. It uses plain JSON so
+lookup programs can load its `entries` object with a standard-library parser.
+Definition values are Base64-encoded UTF-8 to keep the original prose from
+being directly readable in the data file; the code generator decodes them at
+build time. This is basic obfuscation, not encryption.
 
 Each entry has this shape:
 
 ```json
 {
   "part_of_speech": "n.",
-  "definition": "The original definition text.",
+  "definition": "VGhlIG9yaWdpbmFsIGRlZmluaXRpb24gdGV4dC4=",
   "references": [
     {
       "target": "ANOTHER HEADWORD",
@@ -116,22 +118,11 @@ Each entry has this shape:
 }
 ```
 
+The document declares `"definition_encoding": "base64-utf8"`.
 `part_of_speech` is `null` where the source supplies no label. `target` is
 always the canonical key of another object in `entries`; `label` preserves the
 spelling used in the definition. The supported link relations are `q.v.` and
 `see_also`.
-
-Regenerate the file with:
-
-```sh
-python3 build_liff_json.py
-```
-
-Verify that the committed JSON matches its source without changing files:
-
-```sh
-python3 build_liff_json.py --check
-```
 
 ## Generic JSON template engine
 
@@ -180,6 +171,7 @@ Filters are generic operations:
   produce escaped literals
 - `items`, `keys`, and `values` expose JSON objects for iteration
 - `length` returns the size of an object, array, or string
+- `base64_decode` decodes strict Base64 containing UTF-8 text
 - `text` explicitly converts a scalar to text
 
 For example, `{{#scores|items}}{{key}}={{value}};{{/scores}}` iterates an

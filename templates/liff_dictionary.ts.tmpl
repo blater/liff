@@ -9,7 +9,7 @@ export const ENTRIES: readonly Entry[] = Object.freeze([
 {{#entries|items}}    makeEntry(
         {{key|typescript}},
         {{#value.part_of_speech}}{{value.part_of_speech|typescript}}{{/value.part_of_speech}}{{^value.part_of_speech}}null{{/value.part_of_speech}},
-        {{value.definition|typescript}},
+        {{value.definition|base64_decode|typescript}},
         [
 {{#value.references}}            makeReference({{target|typescript}}, {{relation|typescript}}, {{label|typescript}}),
 {{/value.references}}        ],

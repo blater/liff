@@ -13,7 +13,7 @@ ENTRIES: tuple[Entry, ...] = (
 {{#entries|items}}    Entry(
         word={{key|python}},
         part_of_speech={{#value.part_of_speech}}{{value.part_of_speech|python}}{{/value.part_of_speech}}{{^value.part_of_speech}}None{{/value.part_of_speech}},
-        definition={{value.definition|python}},
+        definition={{value.definition|base64_decode|python}},
         references={{^value.references}}(){{/value.references}}{{#value.references|length}}(
 {{#value.references}}            Reference(
                 target={{target|python}},

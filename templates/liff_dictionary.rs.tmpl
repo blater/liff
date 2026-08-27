@@ -22,7 +22,7 @@ pub static ENTRIES: &[Entry] = &[
 {{#entries|items}}    Entry {
         word: {{key|rust}},
         part_of_speech: {{#value.part_of_speech}}Some({{value.part_of_speech|rust}}){{/value.part_of_speech}}{{^value.part_of_speech}}None{{/value.part_of_speech}},
-        definition: {{value.definition|rust}},
+        definition: {{value.definition|base64_decode|rust}},
         references: {{^value.references}}&[]{{/value.references}}{{#value.references|length}}&[
 {{#value.references}}            Reference {
                 target: {{target|rust}},

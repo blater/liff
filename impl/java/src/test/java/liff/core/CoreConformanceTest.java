@@ -1,7 +1,9 @@
 package liff.core;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -106,7 +108,8 @@ public final class CoreConformanceTest {
     private static void generatedSourceAndReferences() throws Exception {
         Map<String, Object> root = object(Json.read(Path.of(
                 System.getProperty("liff.repoRoot"), "liff.json")));
-        equal(1L, root.get("schema_version"), "source schema version");
+        equal(2L, root.get("schema_version"), "source schema version");
+        equal("base64-utf8", root.get("definition_encoding"), "definition encoding");
         equal(root.get("title"), Liff.TITLE, "title");
         equal(root.get("author"), Liff.AUTHOR, "author");
         Map<String, Object> sourceEntries = object(root.get("entries"));
@@ -117,7 +120,10 @@ public final class CoreConformanceTest {
             Entry actual = Liff.entries().get(index++);
             Map<String, Object> expected = object(source.getValue());
             equal(source.getKey(), actual.word(), "canonical word");
-            equal(expected.get("definition"), actual.definition(), "definition");
+            String expectedDefinition = new String(
+                    Base64.getDecoder().decode(string(expected.get("definition"))),
+                    StandardCharsets.UTF_8);
+            equal(expectedDefinition, actual.definition(), "definition");
             Optional<String> part = expected.get("part_of_speech") == null
                     ? Optional.empty()
                     : Optional.of(string(expected.get("part_of_speech")));

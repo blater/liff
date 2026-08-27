@@ -63,6 +63,23 @@ class GenericTemplateRendererTests(unittest.TestCase):
             "2:red=#f00;green=#0f0;[red][green][#f00][#0f0]",
         )
 
+    def test_base64_decode_filter_is_generic_and_chainable(self) -> None:
+        text = "£ café 😀"
+        encoded = base64.b64encode(text.encode("utf-8")).decode("ascii")
+        self.assertEqual(
+            render_template("{{value|base64_decode|json}}", {"value": encoded}),
+            json.dumps(text, ensure_ascii=False),
+        )
+
+        for value in (
+            7,
+            "not base64!",
+            "Zh==",
+            base64.b64encode(b"\xff").decode("ascii"),
+        ):
+            with self.subTest(value=value), self.assertRaises(GenerationError):
+                render_template("{{value|base64_decode}}", {"value": value})
+
     def test_python_and_rust_literals_are_language_appropriate(self) -> None:
         document = {"active": True, "missing": None, "labels": ["a", "b"]}
         template = (
