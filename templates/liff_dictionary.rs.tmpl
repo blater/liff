@@ -1,0 +1,41 @@
+//! Generated from {{source}}; do not edit.
+
+pub const TITLE: &str = {{title|rust}};
+pub const AUTHOR: &str = {{author|rust}};
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct Reference {
+    pub target: &'static str,
+    pub relation: &'static str,
+    pub label: &'static str,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct Entry {
+    pub word: &'static str,
+    pub part_of_speech: Option<&'static str>,
+    pub definition: &'static str,
+    pub references: &'static [Reference],
+}
+
+pub static ENTRIES: &[Entry] = &[
+{{#entries|items}}    Entry {
+        word: {{key|rust}},
+        part_of_speech: {{#value.part_of_speech}}Some({{value.part_of_speech|rust}}){{/value.part_of_speech}}{{^value.part_of_speech}}None{{/value.part_of_speech}},
+        definition: {{value.definition|rust}},
+        references: {{^value.references}}&[]{{/value.references}}{{#value.references|length}}&[
+{{#value.references}}            Reference {
+                target: {{target|rust}},
+                relation: {{relation|rust}},
+                label: {{label|rust}},
+            },
+{{/value.references}}        ]{{/value.references}},
+    },
+{{/entries}}];
+
+pub fn lookup(word: &str) -> Option<&'static Entry> {
+    let word = word.trim();
+    ENTRIES
+        .iter()
+        .find(|entry| entry.word.eq_ignore_ascii_case(word))
+}

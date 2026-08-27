@@ -1,0 +1,25 @@
+/* Generated from {{source}} by generate_json_code.py; do not edit. */
+
+#include "dictionary_generated.h"
+
+const char LIFF_GENERATED_TITLE[] = {{title|c}};
+const char LIFF_GENERATED_AUTHOR[] = {{author|c}};
+
+const LiffEntry LIFF_GENERATED_ENTRIES[] = {
+{{#entries|items}}    {
+        .word = {{key|c}},
+        .part_of_speech = {{#value.part_of_speech}}{{value.part_of_speech|c}}{{/value.part_of_speech}}{{^value.part_of_speech}}NULL{{/value.part_of_speech}},
+        .definition = {{value.definition|c}},
+        .reference_count = {{value.references|length}},
+        .references = {{^value.references}}NULL{{/value.references}}{{#value.references|length}}(const LiffReference[]) {
+{{#value.references}}            {
+                .target = {{target|c}},
+                .relation = {{relation|c}},
+                .label = {{label|c}},
+            },
+{{/value.references}}        }{{/value.references}},
+    },
+{{/entries}}};
+
+const size_t LIFF_GENERATED_ENTRY_COUNT =
+    sizeof(LIFF_GENERATED_ENTRIES) / sizeof(LIFF_GENERATED_ENTRIES[0]);

@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+
+LIFF_BIN_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec node "$LIFF_BIN_DIR/app/entrypoint.js" "$@"

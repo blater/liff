@@ -1,0 +1,17 @@
+// Generated from {{source}} by generate_json_code.py; do not edit.
+
+import { makeEntry, makeReference, type Entry } from "./model";
+
+export const TITLE = {{title|typescript}};
+export const AUTHOR = {{author|typescript}};
+
+export const ENTRIES: readonly Entry[] = Object.freeze([
+{{#entries|items}}    makeEntry(
+        {{key|typescript}},
+        {{#value.part_of_speech}}{{value.part_of_speech|typescript}}{{/value.part_of_speech}}{{^value.part_of_speech}}null{{/value.part_of_speech}},
+        {{value.definition|typescript}},
+        [
+{{#value.references}}            makeReference({{target|typescript}}, {{relation|typescript}}, {{label|typescript}}),
+{{/value.references}}        ],
+    ),
+{{/entries}}]);

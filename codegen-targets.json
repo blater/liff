@@ -1,0 +1,41 @@
+{
+  "input": "liff.json",
+  "targets": {
+    "python": {
+      "template": "templates/liff_dictionary.py.tmpl",
+      "output": "generated/liff_dictionary.py"
+    },
+    "python_impl": {
+      "template": "templates/liff_core_dictionary.py.tmpl",
+      "output": "impl/python/src/liff/dictionary_generated.py"
+    },
+    "rust": {
+      "template": "templates/liff_core_dictionary.rs.tmpl",
+      "output": "impl/rust/crates/liff-core/src/generated/dictionary.rs"
+    },
+    "go": {
+      "template": "templates/liff_dictionary.go.tmpl",
+      "output": "impl/go/dictionary_generated.go"
+    },
+    "zig": {
+      "template": "templates/liff_dictionary.zig.tmpl",
+      "output": "impl/zig/src/dictionary_generated.zig"
+    },
+    "java": {
+      "template": "templates/liff_dictionary.java.tmpl",
+      "output": "impl/java/src/main/java/liff/core/GeneratedDictionary.java"
+    },
+    "typescript": {
+      "template": "templates/liff_dictionary.ts.tmpl",
+      "output": "impl/typescript/src/main/ts/dictionary-generated.ts"
+    },
+    "lua": {
+      "template": "templates/liff_dictionary.lua.tmpl",
+      "output": "impl/lua/src/main/lua/liff/dictionary_generated.lua"
+    },
+    "c": {
+      "template": "templates/liff_dictionary.c.tmpl",
+      "output": "impl/c/src/dictionary_generated.c"
+    }
+  }
+}

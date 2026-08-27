@@ -1,0 +1,21 @@
+// Generated from {{source}} by generate_json_code.py; do not edit.
+
+const model = @import("model.zig");
+
+pub const title = {{title|zig}};
+pub const author = {{author|zig}};
+
+pub const entries = [_]model.Entry{
+{{#entries|items}}    .{
+        .word = {{key|zig}},
+        .part_of_speech = {{#value.part_of_speech}}{{value.part_of_speech|zig}}{{/value.part_of_speech}}{{^value.part_of_speech}}null{{/value.part_of_speech}},
+        .definition = {{value.definition|zig}},
+        .references = {{^value.references}}&.{}{{/value.references}}{{#value.references|length}}&.{
+{{#value.references}}            .{
+                .target = {{target|zig}},
+                .relation = {{relation|zig}},
+                .label = {{label|zig}},
+            },
+{{/value.references}}        }{{/value.references}},
+    },
+{{/entries}}};

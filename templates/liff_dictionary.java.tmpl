@@ -1,0 +1,24 @@
+// Generated from {{source}} by generate_json_code.py; do not edit.
+
+package liff.core;
+
+import java.util.List;
+import java.util.Optional;
+
+final class GeneratedDictionary {
+    static final String TITLE = {{title|java}};
+    static final String AUTHOR = {{author|java}};
+
+    static final List<Entry> ENTRIES = List.of(new Entry[] {
+{{#entries|items}}        new Entry(
+            {{key|java}},
+            {{#value.part_of_speech}}Optional.of({{value.part_of_speech|java}}){{/value.part_of_speech}}{{^value.part_of_speech}}Optional.empty(){{/value.part_of_speech}},
+            {{value.definition|java}},
+            {{^value.references}}List.of(){{/value.references}}{{#value.references|length}}List.of(new Reference[] {
+{{#value.references}}                new Reference({{target|java}}, {{relation|java}}, {{label|java}}),
+{{/value.references}}            }){{/value.references}}
+        ),
+{{/entries}}    });
+
+    private GeneratedDictionary() {}
+}

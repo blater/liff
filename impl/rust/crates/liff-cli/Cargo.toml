@@ -1,0 +1,15 @@
+[package]
+name = "liff-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "liff"
+path = "src/main.rs"
+
+[dependencies]
+liff-core = { path = "../liff-core" }
+
+[lints]
+workspace = true

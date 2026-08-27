@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "query": "  bAnTeEr  ",
+      "outcome": "found",
+      "kind": "exact",
+      "word": "BANTEER",
+      "score": 1000
+    },
+    {
+      "query": "symonds yat",
+      "outcome": "found",
+      "kind": "exact",
+      "word": "SYMOND'S YAT",
+      "score": 1000
+    },
+    {
+      "query": "banteeer",
+      "outcome": "found",
+      "kind": "high_confidence",
+      "word": "BANTEER",
+      "score": 875
+    },
+    {
+      "query": "ainderby steepl",
+      "outcome": "found",
+      "kind": "high_confidence",
+      "word": "AINDERBY STEEPLE",
+      "score": 937
+    },
+    {
+      "query": "glutt",
+      "outcome": "found",
+      "kind": "high_confidence",
+      "word": "GLUTT LODGE",
+      "score": 900
+    },
+    {
+      "query": "bilb",
+      "outcome": "found",
+      "kind": "high_confidence",
+      "word": "BILBSTER",
+      "score": 750
+    },
+    {
+      "query": "bil*",
+      "outcome": "found",
+      "kind": "glob",
+      "word": "BILBSTER",
+      "score": 1000
+    },
+    {
+      "query": "b?lbster",
+      "outcome": "found",
+      "kind": "glob",
+      "word": "BILBSTER",
+      "score": 1000
+    },
+    {
+      "query": "zzzz*",
+      "outcome": "not_found"
+    },
+    {
+      "query": "bi*",
+      "outcome": "did_you_mean",
+      "suggestions": [
+        { "word": "BILBSTER", "confidence": "medium", "score": 1000 },
+        { "word": "BISHOP'S CAUNDLE", "confidence": "medium", "score": 1000 }
+      ]
+    },
+    {
+      "query": "high",
+      "outcome": "did_you_mean",
+      "suggestions": [
+        { "word": "HIGH LIMERIGG", "confidence": "medium", "score": 900 },
+        { "word": "HIGH OFFLEY", "confidence": "medium", "score": 900 },
+        { "word": "AITH", "confidence": "low", "score": 500 },
+        { "word": "CHICAGO", "confidence": "low", "score": 428 }
+      ]
+    },
+    {
+      "query": "lif",
+      "outcome": "found",
+      "kind": "high_confidence",
+      "word": "LIFF",
+      "score": 750
+    },
+    {
+      "query": "bil",
+      "outcome": "not_found"
+    },
+    {
+      "query": "kentt",
+      "outcome": "found",
+      "kind": "high_confidence",
+      "word": "KENT",
+      "score": 800
+    },
+    {
+      "query": "corrievori",
+      "outcome": "did_you_mean",
+      "suggestions": [
+        { "word": "CORRIEVORRIE", "confidence": "medium", "score": 833 },
+        { "word": "CORRIEDOO", "confidence": "medium", "score": 700 },
+        { "word": "CORRIEMOILLIE", "confidence": "low", "score": 615 },
+        { "word": "SCORRIER", "confidence": "low", "score": 600 }
+      ]
+    },
+    {
+      "query": "wst wittering",
+      "outcome": "did_you_mean",
+      "suggestions": [
+        { "word": "WEST WITTERING", "confidence": "medium", "score": 928 },
+        { "word": "EAST WITTERING", "confidence": "medium", "score": 857 },
+        { "word": "KETTERING", "confidence": "low", "score": 538 },
+        { "word": "GREAT WAKERING", "confidence": "low", "score": 500 }
+      ]
+    },
+    {
+      "query": "xyzzy",
+      "outcome": "not_found"
+    },
+    {
+      "query": "",
+      "outcome": "not_found"
+    }
+  ]
+}

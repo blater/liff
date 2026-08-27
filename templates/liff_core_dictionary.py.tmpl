@@ -1,0 +1,25 @@
+"""Generated from {{source}} by generate_json_code.py; do not edit."""
+
+from __future__ import annotations
+
+from .model import Entry, Reference
+
+
+TITLE = {{title|python}}
+AUTHOR = {{author|python}}
+
+
+ENTRIES: tuple[Entry, ...] = (
+{{#entries|items}}    Entry(
+        word={{key|python}},
+        part_of_speech={{#value.part_of_speech}}{{value.part_of_speech|python}}{{/value.part_of_speech}}{{^value.part_of_speech}}None{{/value.part_of_speech}},
+        definition={{value.definition|python}},
+        references={{^value.references}}(){{/value.references}}{{#value.references|length}}(
+{{#value.references}}            Reference(
+                target={{target|python}},
+                relation={{relation|python}},
+                label={{label|python}},
+            ),
+{{/value.references}}        ){{/value.references}},
+    ),
+{{/entries}})

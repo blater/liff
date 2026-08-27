@@ -1,0 +1,47 @@
+"""Generated from {{source}}; do not edit."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+
+TITLE = {{title|python}}
+AUTHOR = {{author|python}}
+
+
+@dataclass(frozen=True, slots=True)
+class Reference:
+    target: str
+    relation: str
+    label: str
+
+
+@dataclass(frozen=True, slots=True)
+class Entry:
+    word: str
+    part_of_speech: str | None
+    definition: str
+    references: tuple[Reference, ...]
+
+
+ENTRIES: dict[str, Entry] = {
+{{#entries|items}}    {{key|python}}: Entry(
+        word={{key|python}},
+        part_of_speech={{#value.part_of_speech}}{{value.part_of_speech|python}}{{/value.part_of_speech}}{{^value.part_of_speech}}None{{/value.part_of_speech}},
+        definition={{value.definition|python}},
+        references={{^value.references}}(){{/value.references}}{{#value.references|length}}(
+{{#value.references}}            Reference(
+                target={{target|python}},
+                relation={{relation|python}},
+                label={{label|python}},
+            ),
+{{/value.references}}        ){{/value.references}},
+    ),
+{{/entries}}}
+
+_CASEFOLD_INDEX = {word.casefold(): entry for word, entry in ENTRIES.items()}
+
+
+def lookup(word: str) -> Entry | None:
+    """Return an entry using a case-insensitive, whitespace-trimmed headword."""
+    return _CASEFOLD_INDEX.get(word.strip().casefold())

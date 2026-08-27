@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "normalization": [
+    { "input": "  SYMOND'S---YAT  ", "output": "symonds yat" },
+    { "input": "Sutton\tand   Cheam", "output": "sutton and cheam" },
+    { "input": "rock’n’roll", "output": "rocknroll" },
+    { "input": "A—B", "output": "a b" },
+    { "input": "café", "output": "caf" },
+    { "input": "Café", "output": "cafe" },
+    { "input": "Straße", "output": "stra e" },
+    { "input": "İstanbul", "output": "stanbul" },
+    { "input": "Σίσυφος", "output": "" },
+    { "input": "Ⅷ 42", "output": "42" }
+  ],
+  "glob_normalization": [
+    { "input": "  BIL***  ", "output": "bil*" },
+    { "input": "SYMOND'S ?AT", "output": "symonds ?at" },
+    { "input": "*—CAFÉ", "output": "* caf" }
+  ],
+  "edit_scores": [
+    { "left": "liff", "right": "ilff", "distance": 1, "score": 750 },
+    { "left": "banteeer", "right": "banteer", "distance": 1, "score": 875 },
+    { "left": "abcdefghij", "right": "abcdefgxyz", "distance": 3, "score": 700 },
+    { "left": "", "right": "", "distance": 0, "score": 1000 },
+    { "left": "", "right": "abc", "distance": 3, "score": 0 }
+  ],
+  "candidate_scores": [
+    { "query": "glutt", "candidate": "glutt lodge", "score": 900 },
+    { "query": "bilb", "candidate": "bilbster", "score": 750 },
+    { "query": "glen", "candidate": "glentaggart", "score": 750 },
+    { "query": "glen", "candidate": "glen taggart", "score": 900 },
+    { "query": "bil", "candidate": "bilbster", "score": 375 }
+  ],
+  "glob_matches": [
+    { "pattern": "bil*", "candidate": "bilbster", "matches": true },
+    { "pattern": "b?lbster", "candidate": "bilbster", "matches": true },
+    { "pattern": "*", "candidate": "bilbster", "matches": true },
+    { "pattern": "bil?", "candidate": "bilbster", "matches": false },
+    { "pattern": "zzzz*", "candidate": "bilbster", "matches": false }
+  ],
+  "ordering": [
+    {
+      "input": ["😀", "z", "\ue000", "a", "é"],
+      "ascending": ["a", "z", "é", "\ue000", "😀"]
+    }
+  ]
+}
