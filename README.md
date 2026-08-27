@@ -258,7 +258,7 @@ The completed language ports have implementation-specific build instructions:
 ## Copyright notice
 
 Dictionary excerpts © 1983 Douglas Adams and John Lloyd; all rights to the
-original text remain with their respective rights holders, and none are claimed
-here. This is an unofficial, non-commercial project, and the excerpts are
-included in the belief that this use is permitted by applicable fair-dealing or
-fair-use exceptions.
+original text remain with their respective rights holders. No rights to that
+text are claimed; this is an unofficial, non-commercial project. If you like
+these excerpts, you should probably buy *The Meaning of Liff*—a rather excellent
+book!
