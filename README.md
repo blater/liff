@@ -1,11 +1,93 @@
-# Structured Liff dictionary
+A Dictionary of Things There Aren’t Any Words for Yet - but There Ought to Be.
 
-Remove compiler working directories, generated scratch output, and caches while
-preserving source files and every deployable `impl/*/bin` artifact:
+# Liff
+
+Liff is a self-contained command-line dictionary with equivalent
+implementations in Rust, Go, Python, Zig, Java, TypeScript, Lua, and C.
+
+## Usage
+
+Build one implementation, then run its executable. The examples below use
+Rust; every completed port implements the same command-line behavior.
 
 ```sh
-make tidy
+impl/rust/build.sh
+
+impl/rust/bin/liff                 # random entry
+impl/rust/bin/liff banteer         # exact lookup
+impl/rust/bin/liff glutt           # confidence-qualified fuzzy lookup
+impl/rust/bin/liff ainderby steeple
 ```
+
+Searches are case-insensitive and ignore insignificant punctuation. A fuzzy
+candidate scoring at least 700 is returned when it is the only candidate at or
+above that threshold. Multiple qualifying candidates produce a `Did you mean?`
+list; weaker searches produce a not-found message.
+
+Quoted glob patterns are also supported. Quote them so the shell passes the
+wildcards to `liff` instead of expanding them as filenames:
+
+```sh
+impl/rust/bin/liff 'bil*'  # unique match: BILBSTER
+impl/rust/bin/liff 'b*'    # every headword beginning with B
+impl/rust/bin/liff 'b?d*'  # ? matches exactly one character
+impl/rust/bin/liff '*'     # every entry
+```
+
+`*` matches zero or more characters and `?` matches exactly one. One glob match
+prints its definition. Multiple matches are alphabetically ordered under
+`Did you mean?`: up to 11 are printed in full; with 12 or more, the first 10 are
+printed followed by `and N others`.
+
+Successful exact, fuzzy, glob, and random results exit with status 0.
+Suggestions and not-found results exit with status 1; invalid CLI usage exits
+with status 2.
+
+## Sample output
+
+With no search term, `liff` returns a random entry, for example:
+
+```console
+$ impl/rust/bin/liff
+WIVENHOE
+The cry of alacrity with which a sprightly eighty-year-old breaks the ice on the lake when going for a swim on Christmas Eve.
+```
+
+An exact lookup returns the matching headword and definition:
+
+```console
+$ impl/rust/bin/liff banteer
+BANTEER
+A lusty and raucous old ballad sung after a particularly spectacular araglin (q.v.) has been pulled off.
+```
+
+A sufficiently confident unique fuzzy match is returned directly:
+
+```console
+$ impl/rust/bin/liff glutt
+GLUTT LODGE
+The place where food can be stored after having a tooth extracted. Some Arabs can go without sustenance for up to six weeks on a full glutt lodge, hence the expression 'the ship of the desert'.
+```
+
+A glob with several matches offers suggestions:
+
+```console
+$ impl/rust/bin/liff 'b?d*'
+Did you mean?
+BEDFONT
+BODMIN
+BUDBY
+BUDE
+```
+
+An unsuccessful search reports the original query:
+
+```console
+$ impl/rust/bin/liff completely-made-up
+No definition found for "completely-made-up".
+```
+
+## Build and maintenance
 
 Every completed language port provides an executable `build.sh` wrapper that
 can be run from any working directory:
@@ -20,6 +102,15 @@ impl/typescript/build.sh
 impl/lua/build.sh
 impl/c/build.sh
 ```
+
+Remove compiler working directories, generated scratch output, and caches while
+preserving source files and every deployable `impl/*/bin` artifact:
+
+```sh
+make tidy
+```
+
+## Dictionary data
 
 `liff.json` is a lookup-ready version of `liff-corrected.txt`. It uses plain
 JSON so lookup programs can load it with a standard-library parser and use the
@@ -165,43 +256,6 @@ make -C impl/typescript test
 make -C impl/lua test
 make -C impl/c test
 ```
-
-## Rust command-line dictionary
-
-Build the self-contained executable, then run it directly:
-
-```sh
-make -C impl/rust
-impl/rust/bin/liff                 # random entry
-impl/rust/bin/liff banteer         # exact lookup
-impl/rust/bin/liff glutt           # unique confidence-qualified lookup
-impl/rust/bin/liff ainderby steeple
-```
-
-Searches are case-insensitive and ignore insignificant punctuation. A fuzzy
-candidate scoring at least 700 is returned when it is the only candidate at or
-above that threshold. Multiple qualifying candidates produce a `Did you mean?`
-list; weaker searches produce a not-found message.
-
-Quoted glob patterns are also supported. Quote them so the shell passes the
-wildcards to `liff` instead of expanding them as filenames:
-
-```sh
-impl/rust/bin/liff 'bil*'  # unique match: BILBSTER
-impl/rust/bin/liff 'b*'    # every headword beginning with B
-impl/rust/bin/liff 'b?d*'  # ? matches exactly one character
-impl/rust/bin/liff '*'     # every entry
-```
-
-`*` matches zero or more characters and `?` matches exactly one. One glob match
-prints its definition. Multiple matches are alphabetically ordered under
-`Did you mean?`: up to 11 are printed in full; with 12 or more, the first 10 are
-printed followed by `and N others`.
-
-Successful exact, fuzzy, glob, and random results exit with status 0.
-Suggestions and not-found results exit with status 1; invalid CLI usage exits
-with status 2. More Rust-specific build details are in
-[`impl/rust/README.md`](impl/rust/README.md).
 
 The language-neutral contract for implementing additional ports is
 [`impl/SPECIFICATION.md`](impl/SPECIFICATION.md).
