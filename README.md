@@ -254,3 +254,11 @@ The completed language ports have implementation-specific build instructions:
 - [TypeScript](impl/typescript/README.md)
 - [Lua](impl/lua/README.md)
 - [C](impl/c/README.md)
+
+## Copyright notice
+
+Dictionary excerpts © 1983 Douglas Adams and John Lloyd; all rights to the
+original text remain with their respective rights holders, and none are claimed
+here. This is an unofficial, non-commercial project, and the excerpts are
+included in the belief that this use is permitted by applicable fair-dealing or
+fair-use exceptions.
